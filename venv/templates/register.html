@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - TechSky</title>
+    <title>Register - TechSky</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 </head>
 <body>
 <div class="container">
-    <h2 class="text-center mt-5">Login</h2>
+    <h2 class="text-center mt-5">Register</h2>
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <form action="{{ url_for('login') }}" method="POST">
+            <form action="{{ url_for('register') }}" method="POST">
                 <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" class="form-control" id="username" name="username" required>
@@ -21,11 +21,8 @@
                     <label for="password">Password</label>
                     <input type="password" class="form-control" id="password" name="password" required>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">Login</button>
+                <button type="submit" class="btn btn-primary btn-block">Register</button>
             </form>
-            <div class="text-center mt-3">
-                <p>Don't have an account? <a href="{{ url_for('register') }}">Register here</a></p>
-            </div>
             {% with messages = get_flashed_messages() %}
             {% if messages %}
                 <div class="alert alert-{{ messages[0][1] }} mt-3" role="alert">
