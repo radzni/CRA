@@ -20,16 +20,40 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        if username == USERNAME and password == PASSWORD:
-            session['logged_in'] = True
-            return redirect(url_for('Index'))
+        cur = mysql.connection.cursor()
+        result = cur.execute("SELECT * FROM users WHERE username = %s", [username])
+        if result > 0:
+            data = cur.fetchone()
+            if password == data[1]:  # Assuming 'password' is the second column in the query result
+                session['logged_in'] = True
+                session['username'] = username
+                flash('You are now logged in', 'success')
+                return redirect(url_for('Index'))
+            else:
+                flash('Invalid password', 'danger')
         else:
-            flash('Invalid Credentials. Please try again.')
+            flash('Username not found', 'danger')
     return render_template('login.html')
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO users (username, password) VALUES (%s, %s)", (username, password))
+        mysql.connection.commit()
+        cur.close()
+        flash('You are now registered and can log in', 'success')
+        return redirect(url_for('login'))
+    return render_template('register.html')
+
 
 @app.route('/logout')
 def logout():
-    session.pop('logged_in', None)
+    session.clear()
+    flash('You are now logged out', 'success')
     return redirect(url_for('login'))
 
 @app.route('/')
@@ -41,6 +65,7 @@ def Index():
     data = cur.fetchall()
     cur.close()
     return render_template('index.html', students=data)
+
 
 @app.route('/insert', methods=['POST'])
 def insert():
