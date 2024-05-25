@@ -11,10 +11,6 @@ app.config['MYSQL_DB'] = 'crud'
 
 mysql = MySQL(app)
 
-# Dummy credentials for demonstration purposes
-USERNAME = 'admin'
-PASSWORD = 'password'
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -30,9 +26,9 @@ def login():
                 flash('You are now logged in', 'success')
                 return redirect(url_for('Index'))
             else:
-                flash('Invalid password', 'danger')
+                flash('Invalid password', 'Invalid Credentials')
         else:
-            flash('Username not found', 'danger')
+            flash('Username not found', 'Invalid Credentials')
     return render_template('login.html')
 
 
@@ -66,6 +62,16 @@ def Index():
     cur.close()
     return render_template('index.html', students=data)
 
+@app.route('/search', methods=['GET'])
+def search():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    query = request.args.get('query')
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM students WHERE name LIKE %s OR email LIKE %s", ('%' + query + '%', '%' + query + '%'))
+    data = cur.fetchall()
+    cur.close()
+    return render_template('index.html', students=data)
 
 @app.route('/insert', methods=['POST'])
 def insert():
