@@ -3,6 +3,7 @@ After i cloned my repository in a folder i proceeded to make the virtual inviron
 then i proceeded to develop the CRUD-REST-API i forgot to record the first stages of development so i just repeated it that is why the first 3 to 4 commits may be closer in time than the last 2
 
 Di ko po marecord yung mga commits kung di ko upload yung boung environment
+
 if need to download only download app.py, template folder, and static place them in an invironmetn on own PC and pip install Flask_MySQLdb
 
 Nasa Gdrive
